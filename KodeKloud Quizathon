@@ -1,0 +1,138 @@
+#Find the file under /etc directory that contains the string 172.16.238.197. Save the answer using the absolute path in the file /home/bob/ip.
+
+sudo grep -r "172.16.238.197" /etc/ > /home/bob/ip
+
+#We have created another file in the sports directory. Change the ownership for the entire sports directory including all the files inside to the service account mercury.
+
+sudo chown -R mercury sports/
+
+#We created a script /usr/local/bin/system-debugger.sh and configured the same to run as a cronjob. Ideally it should run every half an hour each day for every month .i.e. at every 30 minutes.
+Please troubleshoot the issue.
+
+crontab -l
+crontab -e
+*/30 * * * * /usr/local/bin/system-debugger.sh
+
+#Create a script called script.sh under bob's home directory. This script should create a tar archive called archive.tar.gz of the directory called dir1 also located under /home/bob.
+
+#NOTE: Please make sure the script has executable permission and run this script at least once.
+
+vi /home/bob/script.sh
+
+#!/bin/bash
+
+# Change directory to /home/bob
+cd /home/bob
+
+# Create a tar archive of dir1
+tar -czvf archive.tar.gz dir1
+
+chmod +x /home/bob/script.sh
+
+ls -l /home/bob/
+
+#Run a mysql container, map a volume to the container so that the data stored by the container is stored at /opt/data on the host.
+
+
+Name : mysql-db
+Password: db_pass123
+Mysql stores data at /var/lib/mysql inside the container.
+
+docker run -d \
+  --name mysql-db \
+  -e MYSQL_ROOT_PASSWORD=db_pass123 \
+  -v /opt/data:/var/lib/mysql \
+  mysql:latest
+
+#Create a docker-compose.yml file under the directory /root/clickcounter. Once done, run docker-compose up -d.
+ The compose file should have the exact specification as follows -
+ redis service specification - Image name should be redis:alpine. clickcounter service specification - Image name should be kodekloud/click-counter, app is run on port 5000 and expose it on the host port 8085 in the compose file.
+ 
+ vi /root/clickcounter/docker-compose.yml
+ 
+ version: '3'
+services:
+  redis:
+    image: redis:alpine
+
+  clickcounter:
+    image: kodekloud/click-counter
+    ports:
+      - "8085:5000"
+docker-compose up -d
+
+#Create a new Deployment with the below attributes using your own deployment definition file.
+Name: httpd-frontend
+Replicas: 3
+Image: httpd:2.4-alpine
+
+vi deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpd-frontend
+  template:
+    metadata:
+      labels:
+        app: httpd-frontend
+    spec:
+      containers:
+        - name: httpd-frontend
+          image: httpd:2.4-alpine
+
+kubectl apply -f deployment.yaml
+kubectl get deployment
+
+#Please utilize terraform to accomplish the below tasks:
+Pull the ubuntu:latest docker image on docker-host. Using another image - httpd:latest , deploy a container with name foo and hostname webserver . Bind the container port 80 to its host port 80
+
+cd /home/bob/terra-resources
+vi main.tf
+resource "docker_image" "ubuntu_latest" {
+  name         = "ubuntu:latest"
+}
+
+resource "docker_container" "foo" {
+  name      = "foo"
+  image     = "httpd:latest"
+  ports {
+    internal = 80
+    external = 80
+  }
+  hostname  = "webserver"
+  depends_on = [docker_image.ubuntu_latest]
+}
+
+terraform init
+terraform apply
+
+#We have deployed an application that can be accessed from the Web app UI button. But currently, it is not accessible.
+Create a service webapp-service to access the webapp which is identified by selectors name=simple-webapp. The port details are given below.
+nodePort: 30080
+targetPort: 8080
+port: 8080
+
+vi webapp-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort
+  selector:
+    name: simple-webapp
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+
+kubectl apply -f webapp-service.yaml
+
+
