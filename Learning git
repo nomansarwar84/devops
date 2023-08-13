@@ -106,3 +106,77 @@ git status
 And also the .git directory
 
 ls -al
+
+Lesson 3: Commiting the first files
+2. Check status of the repository
+Commit first file
+We are already in proper directory, and git was initialized. Now it is the time to create first file.
+
+touch newfile && echo hello > newfile
+
+Let's check, if git sees the file
+
+git status
+
+In the output you should see that our new file is untracked.
+
+Lesson 3: Commiting the first files
+3. Add files
+add file to staging area
+It is the time to inform git, that we wish to stage our changes. to do so, execute command
+
+git add newfile
+
+this command added the file to the stage area, what can be seen after
+
+git status
+
+You see that the file is tracked and ready to be commited.
+
+It is important to know, if you stage the file once, you don't need to repeat this action again during the work.
+
+5. Add and commit multiple files in one shot
+Add and commit multiple files
+Scenario created some files for you. What was created?
+
+two directories
+one file in root directory of our repo
+one file in directory
+please notice, one directory is empty
+tree
+
+So, how our git status looks?
+
+git status
+
+What we have here?
+
+First, we see one file is ready to be staged. One directory also.
+
+But where are the missing pieces?
+
+file inside the directory is not visibe, as the directory itself is not tracked yet. But Git is aware, that this directory is not empty, therefore we see it as ready to be added.
+
+Second directory is empty, Git knows that, and it decides that adding the directory at this moment is not needed.
+
+Lets add all files in one simple command. Last time we added specific file with git add command. This time we will use
+
+git add .
+
+Let's check
+
+git status
+
+Please, notice the difference. Now, your file is listed as listed to be commited. Empty directory is ommited.
+
+Please be aware of one thing. git add . will add all files from your current directory and subdirectories, not from repository's root. If you are in subdirectory, only files from this path will be added.
+
+Now we are ready to commit.
+
+git commit -m "my second commit"
+
+Let's check
+
+git status
+
+You succesfully commited multiple files!
