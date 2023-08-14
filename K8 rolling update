@@ -9,4 +9,4 @@ Note: The kubectl utility on jump_host has been configured to work with the kube
 
 Solution
 
-kubectl set image deployment nginx-deployment --image=nginx:1.19 --record=true
+kubectl set image deployment nginx-deployment nginx-container=nginx:1.19
